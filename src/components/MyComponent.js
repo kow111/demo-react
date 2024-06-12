@@ -8,26 +8,29 @@ class MyComponents extends React.Component {
     console.log(this.state.age);
     this.setState({
       name: "Ti",
-    });
-    this.setState({
       age: Math.floor(Math.random() * 100 + 1),
     });
   }
-  handleOnMoveOver(event) {
-    console.log(event);
-  }
+  handleOnSubmit = (event) => {
+    event.preventDefault();
+    console.log(this.state);
+  };
+  handleOnChangeInput = (event) => {
+    this.setState({
+      name: event.target.value,
+    });
+  };
   render() {
     return (
       <div>
         My name is {this.state.name} and I'm {this.state.age} years old
-        <button onMouseOver={this.handleOnMoveOver}>hover me</button>
-        <button
-          onClick={() => {
-            this.handleClick();
-          }}
-        >
-          click me
-        </button>
+        <form onSubmit={(event) => this.handleOnSubmit(event)}>
+          <input
+            type="text"
+            onChange={(event) => this.handleOnChangeInput(event)}
+          />
+          <button>Submit</button>
+        </form>
       </div>
     );
   }
