@@ -2,8 +2,8 @@ import React from "react";
 
 class AddUserInfor extends React.Component {
   state = {
-    name: "Teo",
-    age: 10,
+    name: "",
+    age: 0,
   };
   handleOnSubmit = (event) => {
     event.preventDefault();
