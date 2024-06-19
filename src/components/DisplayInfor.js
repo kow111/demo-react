@@ -1,47 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./DisplayInfor.scss";
-import logo from "../logo.svg";
-// class DisplayInfor extends React.Component {
-//   render() {
-//     console.log("render DisplayInfor");
-//     const { listUser } = this.props;
-//     return (
-//       <div className="display-infor-container">
-//         {true && (
-//           <>
-//             {listUser.map((user) => {
-//               return (
-//                 <div key={user.id} className={user.age > 18 ? "green" : "red"}>
-//                   <div>
-//                     <div>My name is {user.name}</div>
-//                     <div>I'm {user.age}</div>
-//                   </div>
-//                   <div>
-//                     <button
-//                       onClick={() => {
-//                         this.props.handleDeleteUser(user.id);
-//                       }}
-//                     >
-//                       X
-//                     </button>
-//                   </div>
-//                   <hr />
-//                 </div>
-//               );
-//             })}
-//           </>
-//         )}
-//       </div>
-//     );
-//   }
-// }
+
 const DisplayInfor = (props) => {
   const { listUser } = props;
   const [isShow, setShowHide] = useState(true);
   const handleShowHide = () => {
     setShowHide(!isShow);
   };
-
+  console.log("Component rendered");
+  useEffect(() => {
+    if (listUser.length === 0) {
+      console.log("No user here");
+    }
+    console.log("call me useEffect");
+  }, [listUser]);
   return (
     <div className="display-infor-container">
       <div>
