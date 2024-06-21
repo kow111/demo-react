@@ -1,11 +1,11 @@
 import "./App.scss";
 import React from "react";
+import Header from "./components/Header/header";
 
 const App = () => {
   return (
     <div className="app-container">
-      Hello world
-      <button>Click me</button>
+      <Header />
     </div>
   );
 };
