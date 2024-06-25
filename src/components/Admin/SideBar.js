@@ -12,9 +12,11 @@ import {
   FaGem,
   FaGithub,
   FaRegLaughWink,
+  FaReact,
 } from "react-icons/fa";
 import "react-pro-sidebar/dist/css/styles.css";
 import sidebarBg from "../../assets/bg2.jpg";
+import "./SideBar.scss";
 const SideBar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
   return (
     <>
@@ -38,28 +40,18 @@ const SideBar = ({ image, collapsed, toggled, handleToggleSidebar }) => {
               whiteSpace: "nowrap",
             }}
           >
-            Title ne
+            <FaReact size={"3em"} color="cyan" />
+            <span>Title</span>
           </div>
         </SidebarHeader>
 
         <SidebarContent>
           <Menu iconShape="circle">
-            <MenuItem
-              icon={<FaTachometerAlt />}
-              suffix={<span className="badge red">New</span>}
-            >
-              dashboard
-            </MenuItem>
-            <MenuItem icon={<FaGem />}>components</MenuItem>
-          </Menu>
-          <Menu iconShape="circle">
-            <SubMenu
-              suffix={<span className="badge yellow">3</span>}
-              icon={<FaRegLaughWink />}
-            >
-              <MenuItem> 1</MenuItem>
-              <MenuItem> 2</MenuItem>
-              <MenuItem> 3</MenuItem>
+            <MenuItem icon={<FaTachometerAlt />}>Dashboard</MenuItem>
+            <SubMenu title="Features" icon={<FaRegLaughWink />}>
+              <MenuItem> Quản lý User</MenuItem>
+              <MenuItem> Quản lý Quiz</MenuItem>
+              <MenuItem> Quản lý Câu hỏi</MenuItem>
             </SubMenu>
           </Menu>
         </SidebarContent>
