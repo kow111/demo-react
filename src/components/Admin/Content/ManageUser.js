@@ -1,9 +1,5 @@
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-
-import { useState } from "react";
 import ModalAddUser from "./ModalAddUser";
-
+import "./ManageUser.scss";
 const ManageUser = (props) => {
   return (
     <div className="manage-user-container">
