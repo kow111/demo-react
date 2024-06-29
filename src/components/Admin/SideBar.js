@@ -9,7 +9,6 @@ import {
 } from "react-pro-sidebar";
 import {
   FaTachometerAlt,
-  FaGem,
   FaGithub,
   FaRegLaughWink,
   FaReact,

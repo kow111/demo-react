@@ -1,8 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import { postCreateUser } from "../../../services/apiService";
 import { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 const ModalAddUser = (props) => {
   // const [show, setShow] = useState(false);
@@ -42,23 +41,13 @@ const ModalAddUser = (props) => {
       toast.error("Password must be at least 6 characters");
       return;
     }
-    const form = new FormData();
-    form.append("email", email);
-    form.append("password", password);
-    form.append("username", username);
-    form.append("role", role);
-    form.append("userImage", image);
 
-    let res = await axios.post(
-      "http://localhost:8081/api/v1/participant",
-      form
-    );
-    console.log(res.data);
-    if (res.data && res.data.EC === 0) {
-      toast.success(res.data.EM);
+    let data = await postCreateUser(email, password, username, role, image);
+    if (data && data.EC === 0) {
+      toast.success(data.EM);
       handleClose();
     } else {
-      toast.error(res.data.EM);
+      toast.error(data.EM);
     }
   };
   const [email, setEmail] = useState("");
