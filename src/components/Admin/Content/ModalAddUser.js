@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 const ModalAddUser = (props) => {
   // const [show, setShow] = useState(false);
   const setShow = props.setShow;
@@ -25,15 +26,22 @@ const ModalAddUser = (props) => {
       setImage(event.target.files[0]);
     }
   };
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
   const handleSubmitAddUser = async () => {
-    // let data = {
-    //   email: email,
-    //   password: password,
-    //   username: username,
-    //   role: role,
-    //   userImage: image,
-    // };
-    // console.log(data);
+    if (!validateEmail(email)) {
+      toast.error("Email is invalid");
+      return;
+    }
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
     const form = new FormData();
     form.append("email", email);
     form.append("password", password);
@@ -45,8 +53,13 @@ const ModalAddUser = (props) => {
       "http://localhost:8081/api/v1/participant",
       form
     );
-    console.log(res);
-    handleClose();
+    console.log(res.data);
+    if (res.data && res.data.EC === 0) {
+      toast.success(res.data.EM);
+      handleClose();
+    } else {
+      toast.error(res.data.EM);
+    }
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
