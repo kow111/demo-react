@@ -9,4 +9,8 @@ const postCreateUser = (email, password, username, role, image) => {
   form.append("userImage", image);
   return axios.post("v1/participant", form);
 };
-export { postCreateUser };
+
+const getAllUser = () => {
+  return axios.get("v1/participant/all");
+};
+export { postCreateUser, getAllUser };
