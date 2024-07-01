@@ -18,13 +18,13 @@ instance.interceptors.request.use(
 // Add a response interceptor
 instance.interceptors.response.use(
   function (response) {
-    console.log("intercep with 2xx", response);
+    // console.log("intercep with 2xx", response);
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response && response.data ? response.data : response;
   },
   function (error) {
-    console.log("intercep out range 2xx", error.response);
+    // console.log("intercep out range 2xx", error.response);
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return error && error.response && error.response.data
