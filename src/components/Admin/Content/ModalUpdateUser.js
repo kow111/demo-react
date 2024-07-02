@@ -1,15 +1,12 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { postCreateUser } from "../../../services/apiService";
+import { putUpdateUser } from "../../../services/apiService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import _ from "lodash";
 const ModelUpdateUser = (props) => {
   // const [show, setShow] = useState(false);
-  const setShow = props.setShow;
-  const show = props.show;
-  const dataUpdate = props.dataUpdate;
-
+  const { setShow, show, dataUpdate, resetDataUpdate } = props;
   const handleClose = () => {
     setShow(false);
     setEmail("");
@@ -18,6 +15,7 @@ const ModelUpdateUser = (props) => {
     setRole("USER");
     setImage("");
     setPreviewImage("");
+    resetDataUpdate();
   };
   const handleShow = () => setShow(true);
 
@@ -34,17 +32,13 @@ const ModelUpdateUser = (props) => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
-  const handleSubmitAddUser = async () => {
+  const handleSubmitUpdateUser = async () => {
     if (!validateEmail(email)) {
       toast.error("Email is invalid");
       return;
     }
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return;
-    }
 
-    let data = await postCreateUser(email, password, username, role, image);
+    let data = await putUpdateUser(dataUpdate.id, username, role, image);
     if (data && data.EC === 0) {
       toast.success(data.EM);
       handleClose();
@@ -60,7 +54,6 @@ const ModelUpdateUser = (props) => {
   const [image, setImage] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   useEffect(() => {
-    console.log("run useEffect");
     if (!_.isEmpty(dataUpdate)) {
       setEmail(dataUpdate.email);
       setUsername(dataUpdate.username);
@@ -152,7 +145,7 @@ const ModelUpdateUser = (props) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmitAddUser}>
+          <Button variant="primary" onClick={handleSubmitUpdateUser}>
             Save Changes
           </Button>
         </Modal.Footer>
