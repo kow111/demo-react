@@ -3,15 +3,20 @@ import { FcPlus } from "react-icons/fc";
 import "./ManageUser.scss";
 import TableUsers from "./TableUsers";
 import { useEffect, useState } from "react";
-import { getAllUser } from "../../../services/apiService";
+import { getAllUser, getUserByPage } from "../../../services/apiService";
 import ModelUpdateUser from "./ModalUpdateUser";
 import ModalViewUser from "./ModalViewUser";
 import ModalDeleteUser from "./ModalDeleteUser";
+import TableUserPaginate from "./TableUserPaginate";
 const ManageUser = (props) => {
+  const LIMIT_USER = 7;
+
   const [show, setShow] = useState(false);
   const [showUpdateUser, setShowUpdateUser] = useState(false);
   const [showViewUser, setShowViewUser] = useState(false);
   const [showDeleteUser, setShowDeleteUser] = useState(false);
+
+  const [pageCount, setPageCount] = useState(0);
 
   const [dataUpdate, setDataUpdate] = useState({});
   const [dataView, setDataView] = useState({});
@@ -25,8 +30,18 @@ const ManageUser = (props) => {
       setUsers(res.DT);
     }
   };
+
+  const fetchDataUsersWithPage = async (page) => {
+    let res = await getUserByPage(page, LIMIT_USER);
+    if (res && res.EC === 0) {
+      console.log(res.DT);
+      setUsers(res.DT.users);
+      setPageCount(res.DT.totalPages);
+    }
+  };
+
   useEffect(() => {
-    fetchDataUsers();
+    fetchDataUsersWithPage(1);
   }, []);
 
   const handleClose = () => setShow(false);
@@ -66,11 +81,19 @@ const ManageUser = (props) => {
           </button>
         </div>
         <div className="table-users-container">
-          <TableUsers
+          {/* <TableUsers
             users={users}
             handleClickUpdateUser={handleClickUpdateUser}
             handleClickViewUser={handleClickViewUser}
             handleClickDeleteUser={handleClickDeleteUser}
+          /> */}
+          <TableUserPaginate
+            users={users}
+            handleClickUpdateUser={handleClickUpdateUser}
+            handleClickViewUser={handleClickViewUser}
+            handleClickDeleteUser={handleClickDeleteUser}
+            fetchDataUsersWithPage={fetchDataUsersWithPage}
+            pageCount={pageCount}
           />
         </div>
         <ModalAddUser
