@@ -46,7 +46,8 @@ const ModalAddUser = (props) => {
     if (data && data.EC === 0) {
       toast.success(data.EM);
       handleClose();
-      await props.fetchDataUsers();
+      props.setCrtPage(1);
+      await props.fetchDataUsersWithPage(1);
     } else {
       toast.error(data.EM);
     }

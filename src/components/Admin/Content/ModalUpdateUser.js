@@ -42,7 +42,7 @@ const ModelUpdateUser = (props) => {
     if (data && data.EC === 0) {
       toast.success(data.EM);
       handleClose();
-      await props.fetchDataUsers();
+      await props.fetchDataUsersWithPage(props.crtPage);
     } else {
       toast.error(data.EM);
     }

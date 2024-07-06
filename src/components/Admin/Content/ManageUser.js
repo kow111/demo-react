@@ -11,6 +11,8 @@ import TableUserPaginate from "./TableUserPaginate";
 const ManageUser = (props) => {
   const LIMIT_USER = 7;
 
+  const [crtPage, setCrtPage] = useState(1);
+
   const [show, setShow] = useState(false);
   const [showUpdateUser, setShowUpdateUser] = useState(false);
   const [showViewUser, setShowViewUser] = useState(false);
@@ -94,12 +96,17 @@ const ManageUser = (props) => {
             handleClickDeleteUser={handleClickDeleteUser}
             fetchDataUsersWithPage={fetchDataUsersWithPage}
             pageCount={pageCount}
+            crtPage={crtPage}
+            setCrtPage={setCrtPage}
           />
         </div>
         <ModalAddUser
           show={show}
           setShow={setShow}
           fetchDataUsers={fetchDataUsers}
+          fetchDataUsersWithPage={fetchDataUsersWithPage}
+          crtPage={crtPage}
+          setCrtPage={setCrtPage}
         />
         <ModelUpdateUser
           show={showUpdateUser}
@@ -107,6 +114,9 @@ const ManageUser = (props) => {
           dataUpdate={dataUpdate}
           fetchDataUsers={fetchDataUsers}
           resetDataUpdate={resetDataUpdate}
+          fetchDataUsersWithPage={fetchDataUsersWithPage}
+          crtPage={crtPage}
+          setCrtPage={setCrtPage}
         />
         <ModalViewUser
           dataView={dataView}
@@ -119,6 +129,9 @@ const ManageUser = (props) => {
           setShow={setShowDeleteUser}
           dataDelete={dataDelete}
           fetchDataUsers={fetchDataUsers}
+          fetchDataUsersWithPage={fetchDataUsersWithPage}
+          crtPage={crtPage}
+          setCrtPage={setCrtPage}
         />
       </div>
     </div>
