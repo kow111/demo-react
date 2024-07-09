@@ -34,6 +34,13 @@ const postLogin = (email, password) => {
     password: password,
   });
 };
+const postRegister = (email, username, password) => {
+  return axios.post("v1/register", {
+    email: email,
+    username: username,
+    password: password,
+  });
+};
 export {
   postCreateUser,
   getAllUser,
@@ -41,4 +48,5 @@ export {
   deleteUser,
   getUserByPage,
   postLogin,
+  postRegister,
 };
