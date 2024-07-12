@@ -2,13 +2,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../services/apiService";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 import "./Login.scss";
+import { doLogin } from "../../redux/action/userAction";
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleClickSubmit = async () => {
     let data = await postLogin(email, password);
     if (data && data.EC === 0) {
+      dispatch(doLogin(data));
       toast.success(data.EM);
       navigate("/");
     } else {
@@ -16,7 +21,7 @@ const Login = (props) => {
     }
     console.log(data);
   };
-  const navigate = useNavigate();
+
   return (
     <div className="login-container">
       <div className="header">
@@ -36,6 +41,7 @@ const Login = (props) => {
           <input
             type="email"
             className="form-control"
+            placeholder="Enter email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
@@ -44,6 +50,7 @@ const Login = (props) => {
           <label>Password</label>
           <input
             type="password"
+            placeholder="Password"
             className="form-control"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
