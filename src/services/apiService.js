@@ -32,7 +32,6 @@ const postLogin = (email, password) => {
   return axios.post("v1/login", {
     email: email,
     password: password,
-    delay: 5000,
   });
 };
 const postRegister = (email, username, password) => {
@@ -42,6 +41,9 @@ const postRegister = (email, username, password) => {
     password: password,
   });
 };
+const getQuizByUser = () => {
+  return axios.get("v1/quiz-by-participant");
+};
 export {
   postCreateUser,
   getAllUser,
@@ -50,4 +52,5 @@ export {
   getUserByPage,
   postLogin,
   postRegister,
+  getQuizByUser,
 };
