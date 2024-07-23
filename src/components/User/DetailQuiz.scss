@@ -12,9 +12,17 @@
     .q-body {
     }
     .q-content {
+      .q-img {
+        img {
+          width: 400px;
+          height: 100%;
+        }
+      }
       .question {
         font-size: 20px;
         font-weight: 600;
+      }
+      .answers {
       }
     }
     .q-footer {

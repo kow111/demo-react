@@ -1,16 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { getDataQuiz } from "../../services/apiService";
 import _ from "lodash";
 import "./DetailQuiz.scss";
+import Question from "./Question";
+import { toast } from "react-toastify";
 const DetailQuiz = (props) => {
   const params = useParams();
   const location = useLocation();
-  console.log(location);
   const quizId = params.quizId;
+
+  const [dataQuiz, setDataQuiz] = useState([]);
+  const [currentQuest, setCurrentQuest] = useState(0);
+
   useEffect(() => {
     fetchQuestion();
   }, [quizId]);
+
+  const handleBackBtn = () => {
+    if (currentQuest === 0) {
+      toast.error("This is the first question");
+    } else {
+      setCurrentQuest(currentQuest - 1);
+    }
+  };
+  const handleNextBtn = () => {
+    if (currentQuest === dataQuiz.length - 1) {
+      toast.error("This is the last question");
+    } else {
+      setCurrentQuest(currentQuest + 1);
+    }
+  };
   const fetchQuestion = async () => {
     let res = await getDataQuiz(quizId);
     if (res && res.EC === 0) {
@@ -35,6 +55,7 @@ const DetailQuiz = (props) => {
         })
         .value();
       console.log(data);
+      setDataQuiz(data);
     }
   };
   return (
@@ -44,20 +65,35 @@ const DetailQuiz = (props) => {
           Quiz {quizId}: {location?.state?.quizTitle}
         </div>
         <hr />
-        <div className="q-body">
-          <img alt="img-q" />
-        </div>
         <div className="q-content">
-          <div className="question">Q1: where r u come from</div>
-          <div className="answers">
-            <div>A. asdasd</div>
-            <div>B. asdasd</div>
-            <div>C. asdsads</div>
-          </div>
+          <Question
+            data={dataQuiz && dataQuiz.length > 0 ? dataQuiz[currentQuest] : []}
+            currentQuest={currentQuest}
+          />
         </div>
         <div className="q-footer">
-          <button className="btn btn-info">Back</button>
-          <button className="btn btn-primary">Next</button>
+          {currentQuest === 0 ? (
+            <button className="btn btn-info" onClick={handleBackBtn} disabled>
+              Back
+            </button>
+          ) : (
+            <button className="btn btn-info" onClick={handleBackBtn}>
+              Back
+            </button>
+          )}
+          {currentQuest === dataQuiz.length - 1 ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => handleNextBtn()}
+              disabled
+            >
+              Next
+            </button>
+          ) : (
+            <button className="btn btn-primary" onClick={() => handleNextBtn()}>
+              Next
+            </button>
+          )}
         </div>
       </div>
       <div className="right-content">count down</div>
