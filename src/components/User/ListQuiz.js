@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import "./ListQuiz.scss";
 const ListQuiz = (props) => {
   const [arrQuiz, setArrQuiz] = useState([]);
-
   const navigate = useNavigate();
   useEffect(() => {
     getQuizData();
@@ -37,7 +36,11 @@ const ListQuiz = (props) => {
                 <button
                   href="#"
                   className="btn btn-primary"
-                  onClick={() => navigate(`/quiz/${quiz.id}`)}
+                  onClick={() =>
+                    navigate(`/quiz/${quiz.id}`, {
+                      state: { quizTitle: quiz.description },
+                    })
+                  }
                 >
                   Start Now
                 </button>
