@@ -31,6 +31,26 @@ const DetailQuiz = (props) => {
       setCurrentQuest(currentQuest + 1);
     }
   };
+  const handleCheckBox = (answerId, questionId) => {
+    let dataQuizClone = _.cloneDeep(dataQuiz);
+    let question = dataQuizClone.find(
+      (item) => +item.questionId === +questionId
+    );
+    if (question && question.answer) {
+      question.answer = question.answer.map((item) => {
+        if (item.id === answerId) {
+          item.isSelected = !item.isSelected;
+        }
+        return item;
+      });
+    }
+    let index = dataQuizClone.findIndex(
+      (item) => +item.questionId === +questionId
+    );
+    dataQuizClone[index] = question;
+    setDataQuiz(dataQuizClone);
+  };
+  const handleFinishBtn = () => {};
   const fetchQuestion = async () => {
     let res = await getDataQuiz(quizId);
     if (res && res.EC === 0) {
@@ -49,12 +69,13 @@ const DetailQuiz = (props) => {
               description = item.description;
               image = item.image;
             }
+            item.answers.isSelected = false;
             answer.push(item.answers);
           });
           return { questionId: key, answer: answer, description, image };
         })
         .value();
-      console.log(data);
+      console.log("data quiz", data);
       setDataQuiz(data);
     }
   };
@@ -68,32 +89,29 @@ const DetailQuiz = (props) => {
         <div className="q-content">
           <Question
             data={dataQuiz && dataQuiz.length > 0 ? dataQuiz[currentQuest] : []}
+            handleCheckBox={handleCheckBox}
             currentQuest={currentQuest}
           />
         </div>
         <div className="q-footer">
-          {currentQuest === 0 ? (
-            <button className="btn btn-info" onClick={handleBackBtn} disabled>
-              Back
-            </button>
-          ) : (
-            <button className="btn btn-info" onClick={handleBackBtn}>
-              Back
-            </button>
-          )}
-          {currentQuest === dataQuiz.length - 1 ? (
-            <button
-              className="btn btn-primary"
-              onClick={() => handleNextBtn()}
-              disabled
-            >
-              Next
-            </button>
-          ) : (
-            <button className="btn btn-primary" onClick={() => handleNextBtn()}>
-              Next
-            </button>
-          )}
+          <button
+            className="btn btn-info"
+            onClick={handleBackBtn}
+            disabled={currentQuest === 0}
+          >
+            Back
+          </button>
+
+          <button
+            className="btn btn-primary"
+            onClick={() => handleNextBtn()}
+            disabled={currentQuest === dataQuiz.length - 1}
+          >
+            Next
+          </button>
+          <button className="btn btn-warning" onClick={() => handleFinishBtn()}>
+            Finish
+          </button>
         </div>
       </div>
       <div className="right-content">count down</div>
