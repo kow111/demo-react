@@ -50,7 +50,42 @@ const DetailQuiz = (props) => {
     dataQuizClone[index] = question;
     setDataQuiz(dataQuizClone);
   };
-  const handleFinishBtn = () => {};
+  const handleFinishBtn = () => {
+    console.log("check data bf submit", dataQuiz);
+    let payload = {};
+    payload.quizId = +quizId;
+    let answers = [];
+    if (dataQuiz && dataQuiz.length > 0) {
+      dataQuiz.forEach((item) => {
+        let obj = {};
+        let questionId = item.questionId;
+        let userAnswerId = [];
+        item.answer.forEach((item) => {
+          if (item.isSelected) {
+            userAnswerId.push(item.id);
+          }
+        });
+        obj.questionId = +questionId;
+        obj.userAnswerId = userAnswerId;
+        answers.push(obj);
+      });
+      payload.answers = answers;
+      console.log("check payload: ", payload);
+    }
+    //   {
+    //     "quizId": 1,
+    //     "answers": [
+    //         {
+    //             "questionId": 1,
+    //             "userAnswerId": [3]
+    //         },
+    //         {
+    //             "questionId": 2,
+    //             "userAnswerId": [6]
+    //         }
+    //     ]
+    // }
+  };
   const fetchQuestion = async () => {
     let res = await getDataQuiz(quizId);
     if (res && res.EC === 0) {
@@ -60,7 +95,6 @@ const DetailQuiz = (props) => {
         .groupBy("id")
         // `key` is group's name (color), `value` is the array of objects
         .map((value, key) => {
-          console.log("value: ", value);
           let answer = [];
           let description,
             image = null;
@@ -75,7 +109,6 @@ const DetailQuiz = (props) => {
           return { questionId: key, answer: answer, description, image };
         })
         .value();
-      console.log("data quiz", data);
       setDataQuiz(data);
     }
   };
