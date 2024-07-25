@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import User from "./components/User/User";
 import Admin from "./components/Admin/Admin";
 import HomePage from "./components/Home/HomePage";
 import ManageUser from "./components/Admin/Content/ManageUser";
@@ -12,6 +11,7 @@ import Register from "./components/Auth/Register";
 import ListQuiz from "./components/User/ListQuiz";
 import DetailQuiz from "./components/User/DetailQuiz";
 import NotFound from "./components/NotFound";
+import ManageQuiz from "./components/Admin/Content/Quiz/ManageQuiz";
 const Layout = (props) => {
   return (
     <>
@@ -24,6 +24,7 @@ const Layout = (props) => {
         <Route path="/admin" element={<Admin />}>
           <Route index element={<Dashboard />} />
           <Route path="manage-users" element={<ManageUser />} />
+          <Route path="manage-quizs" element={<ManageQuiz />} />
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>

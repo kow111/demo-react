@@ -9,7 +9,14 @@ const postCreateUser = (email, password, username, role, image) => {
   form.append("userImage", image);
   return axios.post("v1/participant", form);
 };
-
+const postCreateQuiz = (description, name, difficulty, quizImage) => {
+  const form = new FormData();
+  form.append("description", description);
+  form.append("name", name);
+  form.append("difficulty", difficulty);
+  form.append("quizImage", quizImage);
+  return axios.post("v1/quiz", form);
+};
 const getAllUser = () => {
   return axios.get("v1/participant/all");
 };
@@ -61,4 +68,5 @@ export {
   getQuizByUser,
   getDataQuiz,
   submitAnswer,
+  postCreateQuiz,
 };
