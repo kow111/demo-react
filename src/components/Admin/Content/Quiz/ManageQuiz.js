@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./ManageQuiz.scss";
 import Select from "react-select";
+import { postCreateQuiz } from "../../../../services/apiService";
+import { toast } from "react-toastify";
 const options = [
   { value: "EASY", label: "Easy" },
   { value: "MEDIUM", label: "Medium" },
@@ -9,10 +11,27 @@ const options = [
 const ManageQuiz = (props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [difficulty, setDifficulty] = useState("EASY");
+  const [difficulty, setDifficulty] = useState("");
   const [image, setImage] = useState(null);
   const handleUploadImage = (event) => {
-    setImage(image.target.files[0]);
+    if (event.target && event.target.files && event.target.files[0]) {
+      setImage(event.target.files[0]);
+    }
+  };
+  const handleSubmitQuiz = async () => {
+    if (!name || !description) {
+      toast.error("Name and Description is required");
+      return;
+    }
+    let res = await postCreateQuiz(description, name, difficulty?.value, image);
+    if (res.EC === 0) {
+      console.log(res);
+      toast.success(res.EM);
+      setName("");
+      setDescription("");
+    } else {
+      toast.error(res.EM);
+    }
   };
   return (
     <div className="quiz-container">
@@ -44,7 +63,8 @@ const ManageQuiz = (props) => {
           <div className="my-3">
             <Select
               options={options}
-              value={difficulty}
+              defaultValue={difficulty}
+              onChange={setDifficulty}
               placeholder="Quiz difficult..."
             />
           </div>
@@ -59,7 +79,14 @@ const ManageQuiz = (props) => {
               onChange={(event) => handleUploadImage(event)}
             />
           </div>
-          <button className="btn btn-primary mt-3">Add</button>
+          <div className="mt-3 button-save">
+            <button
+              className="btn btn-primary"
+              onClick={() => handleSubmitQuiz()}
+            >
+              Save
+            </button>
+          </div>
         </fieldset>
       </div>
       <div className="list-detail"></div>

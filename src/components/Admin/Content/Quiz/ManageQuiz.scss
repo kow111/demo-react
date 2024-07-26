@@ -7,4 +7,10 @@
   legend {
     font-size: 13px;
   }
+  fieldset {
+    .button-save {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
 }
