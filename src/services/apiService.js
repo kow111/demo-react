@@ -57,6 +57,9 @@ const getDataQuiz = (quizId) => {
 const submitAnswer = (data) => {
   return axios.post(`v1/quiz-submit`, { ...data });
 };
+const getAllQuizForAdmin = () => {
+  return axios.get(`v1/quiz/all`);
+};
 export {
   postCreateUser,
   getAllUser,
@@ -69,4 +72,5 @@ export {
   getDataQuiz,
   submitAnswer,
   postCreateQuiz,
+  getAllQuizForAdmin,
 };
