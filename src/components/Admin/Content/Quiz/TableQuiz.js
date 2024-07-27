@@ -24,8 +24,18 @@ const TableQuiz = (props) => {
                 <td>{item.difficulty}</td>
                 <td>
                   <button className="btn btn-infor">View</button>
-                  <button className="btn btn-warning mx-2">Update</button>
-                  <button className="btn btn-danger">Delete</button>
+                  <button
+                    className="btn btn-warning mx-2"
+                    onClick={() => props.handleClickUpdateQuiz(item)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => props.handleClickDeleteQuiz(item)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );

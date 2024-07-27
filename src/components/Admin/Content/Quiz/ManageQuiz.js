@@ -8,6 +8,8 @@ import {
 } from "../../../../services/apiService";
 import { toast } from "react-toastify";
 import TableQuiz from "./TableQuiz";
+import ModalDeleteQuiz from "./ModalDeleteQuiz";
+import ModalUpdateQuiz from "./ModalUpdateQuiz";
 const options = [
   { value: "EASY", label: "Easy" },
   { value: "MEDIUM", label: "Medium" },
@@ -21,6 +23,20 @@ const ManageQuiz = (props) => {
 
   const [listQuiz, setListQuiz] = useState([]);
 
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [dataDelete, setDataDelete] = useState({});
+
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState({});
+
+  const handleClickDeleteQuiz = (quiz) => {
+    setShowModalDelete(true);
+    setDataDelete(quiz);
+  };
+  const handleClickUpdateQuiz = (quiz) => {
+    setShowModalUpdate(true);
+    setDataUpdate(quiz);
+  };
   const handleUploadImage = (event) => {
     if (event.target && event.target.files && event.target.files[0]) {
       setImage(event.target.files[0]);
@@ -117,8 +133,24 @@ const ManageQuiz = (props) => {
 
       <div className="list-detail">
         {" "}
-        <TableQuiz listQuiz={listQuiz} />
+        <TableQuiz
+          listQuiz={listQuiz}
+          handleClickDeleteQuiz={handleClickDeleteQuiz}
+          handleClickUpdateQuiz={handleClickUpdateQuiz}
+        />
       </div>
+      <ModalDeleteQuiz
+        show={showModalDelete}
+        setShow={setShowModalDelete}
+        dataDelete={dataDelete}
+        fetchDataQuiz={fetchDataQuiz}
+      />
+      <ModalUpdateQuiz
+        show={showModalUpdate}
+        setShow={setShowModalUpdate}
+        dataUpdate={dataUpdate}
+        fetchDataQuiz={fetchDataQuiz}
+      />
     </div>
   );
 };

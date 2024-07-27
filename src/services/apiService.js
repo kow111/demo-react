@@ -29,8 +29,20 @@ const putUpdateUser = (id, username, role, image) => {
   form.append("userImage", image);
   return axios.put("v1/participant", form);
 };
+const putUpdateQuiz = (id, description, name, difficulty, quizImage) => {
+  const form = new FormData();
+  form.append("id", id);
+  form.append("description", description);
+  form.append("name", name);
+  form.append("difficulty", difficulty);
+  form.append("quizImage", quizImage);
+  return axios.put("v1/quiz", form);
+};
 const deleteUser = (userId) => {
   return axios.delete("v1/participant", { data: { id: userId } });
+};
+const deleteQuiz = (quizId) => {
+  return axios.delete(`v1/quiz/${quizId}`);
 };
 const getUserByPage = (page, limit) => {
   return axios.get(`v1/participant?page=${page}&limit=${limit}`);
@@ -73,4 +85,6 @@ export {
   submitAnswer,
   postCreateQuiz,
   getAllQuizForAdmin,
+  deleteQuiz,
+  putUpdateQuiz,
 };
