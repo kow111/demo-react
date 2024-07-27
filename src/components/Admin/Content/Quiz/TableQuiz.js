@@ -2,7 +2,7 @@ const TableQuiz = (props) => {
   const { listQuiz } = props;
 
   return (
-    <table className="table table-hover table-bordered mt-3">
+    <table className="table table-hover table-bordered mt-3 mb-3">
       <thead>
         <tr>
           <th scope="col">ID</th>
