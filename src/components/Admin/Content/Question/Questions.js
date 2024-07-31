@@ -3,6 +3,7 @@ import Select from "react-select";
 import "./Questions.scss";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
+import Lightbox from "react-awesome-lightbox";
 
 const Questions = (props) => {
   const options = [
@@ -26,6 +27,11 @@ const Questions = (props) => {
       ],
     },
   ]);
+  const [isPreviewImage, setIsPreviewImage] = useState(false);
+  const [dataImagePreview, setDataImagePreview] = useState({
+    title: "",
+    url: "",
+  });
   const handleAddRemoveQuestion = (type, id) => {
     if (type === "ADD") {
       const newQuestion = {
@@ -112,6 +118,13 @@ const Questions = (props) => {
       setQuestions(questionsClone);
     }
   };
+  const handlePreviewImage = (item) => {
+    setDataImagePreview({
+      title: item.imageName,
+      url: URL.createObjectURL(item.imageFile),
+    });
+    setIsPreviewImage(true);
+  };
   const handleSubmitQuestionsForQuiz = () => {
     console.log("Q: ", questions);
   };
@@ -146,16 +159,34 @@ const Questions = (props) => {
                       }
                     />
                   </div>
-                  <div className=" col-3">
+                  <div className="col-3 d-flex flex-column">
+                    <label
+                      className="btn btn-secondary"
+                      htmlFor={`upload-${item.id}`}
+                      style={{ width: "150px" }}
+                    >
+                      Upload image
+                    </label>
                     <input
+                      id={`upload-${item.id}`}
                       type="file"
                       className="form-control"
+                      hidden
                       onChange={(event) =>
                         handleOnChangeFileQuestions(item.id, event)
                       }
                     />
                     <span>
-                      {item.imageName ? item.imageName : "0 file is uploaded"}
+                      {item.imageName ? (
+                        <span
+                          onClick={() => handlePreviewImage(item)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {item.imageName}
+                        </span>
+                      ) : (
+                        "0 file is uploaded"
+                      )}
                     </span>
                   </div>
                   <div className="col-3">
@@ -246,6 +277,13 @@ const Questions = (props) => {
               Save Questions
             </button>
           </div>
+        )}
+        {isPreviewImage && (
+          <Lightbox
+            image={dataImagePreview.url}
+            title={dataImagePreview.title}
+            onClose={() => setIsPreviewImage(false)}
+          ></Lightbox>
         )}
       </div>
     </div>
