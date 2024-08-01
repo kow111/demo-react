@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Select from "react-select";
 import "./Questions.scss";
 import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
 import Lightbox from "react-awesome-lightbox";
+import {
+  getAllQuizForAdmin,
+  postCreateNewAnswerForQuestion,
+  postCreateNewQuestionForQuiz,
+} from "../../../../services/apiService";
 
 const Questions = (props) => {
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-  const [selectedQuiz, setSelectedQuiz] = useState("");
   const [questions, setQuestions] = useState([
     {
       id: uuidv4(),
@@ -32,6 +31,22 @@ const Questions = (props) => {
     title: "",
     url: "",
   });
+  const [listQuiz, setListQuiz] = useState([]);
+  const [selectedQuiz, setSelectedQuiz] = useState("");
+
+  useEffect(() => {
+    fetchDataQuiz();
+  }, []);
+  const fetchDataQuiz = async () => {
+    let res = await getAllQuizForAdmin();
+    if (res && res.EC === 0) {
+      let newQuiz = res.DT.map((item) => {
+        return { value: item.id, label: `${item.id}: ${item.name}` };
+      });
+      setListQuiz(newQuiz);
+    }
+  };
+
   const handleAddRemoveQuestion = (type, id) => {
     if (type === "ADD") {
       const newQuestion = {
@@ -125,8 +140,27 @@ const Questions = (props) => {
     });
     setIsPreviewImage(true);
   };
-  const handleSubmitQuestionsForQuiz = () => {
-    console.log("Q: ", questions);
+  const handleSubmitQuestionsForQuiz = async () => {
+    await Promise.all(
+      questions.map(async (question) => {
+        const q = await postCreateNewQuestionForQuiz(
+          +selectedQuiz.value,
+          question.description,
+          question.imageFile
+        );
+        await Promise.all(
+          question.answers.map(async (answer) => {
+            await postCreateNewAnswerForQuestion(
+              answer.description,
+              answer.isCorrect,
+              q.DT.id
+            );
+          })
+        );
+      })
+    );
+
+    //
   };
   return (
     <div className="questions-container">
@@ -138,7 +172,7 @@ const Questions = (props) => {
           <Select
             defaultValue={selectedQuiz}
             onChange={setSelectedQuiz}
-            options={options}
+            options={listQuiz}
           />
         </div>
         <div className="mt-3">Add Questions:</div>

@@ -10,9 +10,13 @@ const Question = (props) => {
   };
   return (
     <>
-      {data && data.image && (
+      {data && data.image ? (
         <div className="q-img">
           <img alt="q-img" src={`data:image/png;base64,${data.image}`} />
+        </div>
+      ) : (
+        <div className="q-img">
+          <span>This Question has no image</span>
         </div>
       )}
 

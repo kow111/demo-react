@@ -72,6 +72,24 @@ const submitAnswer = (data) => {
 const getAllQuizForAdmin = () => {
   return axios.get(`v1/quiz/all`);
 };
+const postCreateNewQuestionForQuiz = (quizId, description, questionImage) => {
+  const form = new FormData();
+  form.append("quiz_id", quizId);
+  form.append("description", description);
+  form.append("questionImage", questionImage);
+  return axios.post(`v1/question`, form);
+};
+const postCreateNewAnswerForQuestion = (
+  description,
+  correctAnswer,
+  questionId
+) => {
+  return axios.post(`v1/answer`, {
+    description,
+    correct_answer: correctAnswer,
+    question_id: questionId,
+  });
+};
 export {
   postCreateUser,
   getAllUser,
@@ -87,4 +105,6 @@ export {
   getAllQuizForAdmin,
   deleteQuiz,
   putUpdateQuiz,
+  postCreateNewQuestionForQuiz,
+  postCreateNewAnswerForQuestion,
 };
