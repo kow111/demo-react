@@ -9,23 +9,27 @@ import {
   postCreateNewAnswerForQuestion,
   postCreateNewQuestionForQuiz,
 } from "../../../../services/apiService";
+import { toast } from "react-toastify";
 
 const Questions = (props) => {
-  const [questions, setQuestions] = useState([
+  const initQuestion = [
     {
       id: uuidv4(),
       description: "",
       imageFile: "",
       imageName: "",
+      isValid: false,
       answers: [
         {
           id: uuidv4(),
           description: "",
           isCorrect: false,
+          isValid: false,
         },
       ],
     },
-  ]);
+  ];
+  const [questions, setQuestions] = useState(initQuestion);
   const [isPreviewImage, setIsPreviewImage] = useState(false);
   const [dataImagePreview, setDataImagePreview] = useState({
     title: "",
@@ -141,25 +145,84 @@ const Questions = (props) => {
     setIsPreviewImage(true);
   };
   const handleSubmitQuestionsForQuiz = async () => {
-    await Promise.all(
-      questions.map(async (question) => {
-        const q = await postCreateNewQuestionForQuiz(
-          +selectedQuiz.value,
-          question.description,
-          question.imageFile
-        );
-        await Promise.all(
-          question.answers.map(async (answer) => {
-            await postCreateNewAnswerForQuestion(
-              answer.description,
-              answer.isCorrect,
-              q.DT.id
-            );
-          })
-        );
-      })
-    );
+    let questionsClone = _.cloneDeep(questions);
+    if (_.isEmpty(selectedQuiz)) {
+      toast.error("No quiz selected");
+      return;
+    }
+    questionsClone = questionsClone.map((item) => {
+      item.isValid = false;
+      item.answers.map((answer) => {
+        answer.isValid = false;
+        return answer;
+      });
+      return item;
+    });
+    //validate answer
+    let isValidA = true;
+    let indexQ = 0,
+      indexA = 0;
+    let isValidQ = true;
+    for (let i = 0; i < questions.length; i++) {
+      if (!questions[i].description) {
+        let iQ = questionsClone.findIndex((item) => {
+          return item.id === questions[i].id;
+        });
+        questionsClone[iQ].isValid = true;
+        setQuestions(questionsClone);
 
+        isValidQ = false;
+        indexQ = i;
+        break;
+      }
+    }
+    if (isValidQ === false) {
+      toast.error(`Not empty Description for Question ${indexQ + 1}`);
+      return;
+    }
+    for (let i = 0; i < questions.length; i++) {
+      for (let j = 0; j < questions[i].answers.length; j++) {
+        if (!questions[i].answers[j].description) {
+          let iQ = questionsClone.findIndex((item) => {
+            return item.id === questions[i].id;
+          });
+          let iA = questionsClone[iQ].answers.findIndex(
+            (item) => item.id === questions[i].answers[j].id
+          );
+          questionsClone[iQ].answers[iA].isValid = true;
+          setQuestions(questionsClone);
+
+          isValidA = false;
+          indexA = j;
+          break;
+        }
+      }
+      indexQ = i;
+      if (isValidA === false) {
+        break;
+      }
+    }
+    if (isValidA === false) {
+      toast.error(`Not Empty Answer ${indexA + 1} at Question ${indexQ + 1}`);
+      return;
+    }
+
+    for (const question of questions) {
+      const q = await postCreateNewQuestionForQuiz(
+        +selectedQuiz.value,
+        question.description,
+        question.imageFile
+      );
+      for (const answer of question.answers) {
+        await postCreateNewAnswerForQuestion(
+          answer.description,
+          answer.isCorrect,
+          q.DT.id
+        );
+      }
+    }
+    toast.success("Create questions and answers success");
+    setQuestions(initQuestion);
     //
   };
   return (
@@ -185,7 +248,11 @@ const Questions = (props) => {
                   <div className="col-6">
                     <input
                       type="text"
-                      className="form-control"
+                      className={
+                        item.isValid
+                          ? "form-control is-invalid"
+                          : "form-control"
+                      }
                       placeholder={`Question ${index + 1}'s Description`}
                       value={item.description}
                       onChange={(event) =>
@@ -263,7 +330,11 @@ const Questions = (props) => {
                       <div className="col-6 answer-name">
                         <input
                           type="text"
-                          className="form-control"
+                          className={
+                            answer.isValid
+                              ? "form-control is-invalid"
+                              : "form-control"
+                          }
                           placeholder={`Answer ${index + 1}`}
                           value={answer.description}
                           onChange={(event) =>
