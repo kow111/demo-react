@@ -10,6 +10,9 @@ body {
 }
 .app-container {
   .main-container {
+    .app-content {
+      height: calc(100vh - 100px);
+    }
     .homepage-container {
       .homepage-content {
         padding: 100px;
@@ -42,6 +45,7 @@ body {
       padding-top: 20px;
       z-index: 10;
       opacity: 1;
+      border-bottom: 1px solid #ccc;
     }
     .navbar-nav {
       .nav-link {
