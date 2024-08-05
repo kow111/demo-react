@@ -6,9 +6,8 @@ import _ from "lodash";
 import Lightbox from "react-awesome-lightbox";
 import {
   getAllQuizForAdmin,
-  postCreateNewAnswerForQuestion,
-  postCreateNewQuestionForQuiz,
   getQuizWithQA,
+  postUpsertQA,
 } from "../../../../services/apiService";
 import { toast } from "react-toastify";
 
@@ -250,25 +249,34 @@ const QuizQA = (props) => {
       toast.error(`Not Empty Answer ${indexA + 1} at Question ${indexQ + 1}`);
       return;
     }
-
-    for (const question of questions) {
-      const q = await postCreateNewQuestionForQuiz(
-        +selectedQuiz.value,
-        question.description,
-        question.imageFile
-      );
-      for (const answer of question.answers) {
-        await postCreateNewAnswerForQuestion(
-          answer.description,
-          answer.isCorrect,
-          q.DT.id
+    let questionsClone2 = _.cloneDeep(questions);
+    for (let i = 0; i < questionsClone2.length; i++) {
+      if (questionsClone2[i].imageFile) {
+        questionsClone2[i].imageFile = await toBase64(
+          questionsClone2[i].imageFile
         );
       }
     }
-    toast.success("Create questions and answers success");
-    setQuestions(initQuestion);
+    let res = await postUpsertQA({
+      quizId: selectedQuiz.value,
+      questions: questionsClone2,
+    });
+    if (res.EC === 0) {
+      toast.success(res.EM);
+      fetchQuizQA();
+    } else {
+      toast.error(res.EM);
+    }
     //
   };
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+
   return (
     <div className="questions-container">
       <div className="add-new-question">

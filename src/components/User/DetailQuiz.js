@@ -86,19 +86,6 @@ const DetailQuiz = (props) => {
       }
       console.log("check response: ", res);
     }
-    //   {
-    //     "quizId": 1,
-    //     "answers": [
-    //         {
-    //             "questionId": 1,
-    //             "userAnswerId": [3]
-    //         },
-    //         {
-    //             "questionId": 2,
-    //             "userAnswerId": [6]
-    //         }
-    //     ]
-    // }
   };
   const fetchQuestion = async () => {
     let res = await getDataQuiz(quizId);
