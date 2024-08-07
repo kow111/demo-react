@@ -154,6 +154,7 @@ const DetailQuiz = (props) => {
           currentQuest={currentQuest}
           dataQuiz={dataQuiz}
           setCurrentQuest={setCurrentQuest}
+          handleFinishBtn={handleFinishBtn}
         />
       </div>
       <ModalResult

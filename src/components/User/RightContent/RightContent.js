@@ -1,8 +1,17 @@
+import CountDown from "./CountDown";
+
 const RightContent = (props) => {
   const { dataQuiz } = props;
+
+  const onTimeUp = () => {
+    props.handleFinishBtn();
+  };
+
   return (
     <>
-      <div className="main-timer">10:30</div>
+      <div className="main-timer">
+        <CountDown onTimeUp={onTimeUp} />
+      </div>
       <div className="main-question">
         {dataQuiz &&
           dataQuiz.length > 0 &&
