@@ -67,7 +67,6 @@
       flex-wrap: wrap;
       .questions {
         display: flex;
-
         align-items: center;
         justify-content: center;
         border: 1px solid #ccc;
@@ -75,6 +74,15 @@
         border-radius: 50%;
         width: 40px;
         cursor: pointer;
+        &:hover {
+          color: rgb(161, 230, 175);
+        }
+        &.selected {
+          background: #ccc;
+        }
+        &.clicked {
+          color: rgb(161, 230, 175);
+        }
       }
     }
   }

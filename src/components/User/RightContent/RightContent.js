@@ -1,12 +1,27 @@
 import CountDown from "./CountDown";
 
 const RightContent = (props) => {
-  const { dataQuiz } = props;
+  const { dataQuiz, currentQuest } = props;
 
   const onTimeUp = () => {
     props.handleFinishBtn();
   };
-
+  const getClassQuestion = (item, i) => {
+    console.log(item, i);
+    if (item && item.answer.length > 0) {
+      let check = item.answer.find((a) => a.isSelected === true);
+      if (check && currentQuest === i) {
+        return "questions selected clicked";
+      }
+      if (check) {
+        return "questions selected";
+      }
+      if (currentQuest === i) {
+        return "questions clicked";
+      }
+    }
+    return "questions";
+  };
   return (
     <>
       <div className="main-timer">
@@ -17,7 +32,7 @@ const RightContent = (props) => {
           dataQuiz.length > 0 &&
           dataQuiz.map((item, index) => (
             <div
-              className="questions"
+              className={getClassQuestion(item, index)}
               key={`Q-${index}`}
               onClick={() => props.setCurrentQuest(index)}
             >
