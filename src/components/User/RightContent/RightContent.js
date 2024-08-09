@@ -7,7 +7,6 @@ const RightContent = (props) => {
     props.handleFinishBtn();
   };
   const getClassQuestion = (item, i) => {
-    console.log(item, i);
     if (item && item.answer.length > 0) {
       let check = item.answer.find((a) => a.isSelected === true);
       if (check && currentQuest === i) {

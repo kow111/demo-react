@@ -75,13 +75,13 @@
         width: 40px;
         cursor: pointer;
         &:hover {
-          color: rgb(161, 230, 175);
+          color: gray;
         }
         &.selected {
           background: #ccc;
         }
         &.clicked {
-          color: rgb(161, 230, 175);
+          color: gray;
         }
       }
     }
